@@ -1,7 +1,10 @@
 #!/bin/env node
-var http, director, bot, router, server, port, db;
+var http, director, bot, router, server, port, db, express, app;
 
-http        = require('http');
+
+express = require('express');
+app = express();
+http = require('http');
 director    = require('director');
 bot         = require('./groupme_bots.js');
 
@@ -35,10 +38,15 @@ server = http.createServer(function (req, res) {
   });
 });
 
-port = Number(process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3002);
-ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3002);
+app.set('ip', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
 
-server.listen(port, ip);
+http.createServer(app).listen(app.get('port') ,app.get('ip'), function () {
+    console.log("✔ Express server listening at %s:%d ", app.get('ip'),app.get('port'));
+    server();
+});
+
+// server.listen(port, ip);
 
 function ping() {
   this.res.writeHead(200);

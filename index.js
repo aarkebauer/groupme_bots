@@ -3,7 +3,7 @@ var http, director, bot, router, server, port, db;
 
 http        = require('http');
 director    = require('director');
-bot         = require('./bot.js');
+bot         = require('./groupme_bot.js');
 
 router = new director.http.Router({
   '/'    : {
